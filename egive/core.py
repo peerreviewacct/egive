@@ -13,7 +13,7 @@ from sklearn.preprocessing import PolynomialFeatures, SplineTransformer
 from sklearn.pipeline import make_pipeline
 from sklearn.metrics import roc_auc_score
 
-from .utils import neg_auc, rmse, mse, mae, retrieve_quantiles, get_neighborhood_points, logit_catch_singular, propensity_filters_and_weights, pdp_propensity_filters_and_weights, cutpoints, feature_importance_scores
+from .utils import neg_auc, rmse, mse, mae, retrieve_quantiles, get_neighborhood_points, logit_catch_singular, propensity_filters_and_weights, pdp_propensity_filters_and_weights, cutpoints, feature_importance_scores, egive_center_pdp, egive_append_threeway_scores
 
 def run_egive(X, y, model, metric,
              predict_method = None,
