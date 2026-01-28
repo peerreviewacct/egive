@@ -26,7 +26,7 @@ setup(
         "pandas >= 1.5.3, < 3",
         "scipy>=1.6.3, < 2",
         "joblib>=1.5.3, < 2",
-        "altair>=5.5.0, < 6",
+        "altair>=5.0.0, < 5.5.0",
         "scikit-learn>=1.6.1, < 2",
         "statsmodels>=0.14.6, < 1",
         "vegafusion[embed] >= 1.5.0",
