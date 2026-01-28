@@ -31,7 +31,7 @@ def run_egive(X, y, model, metric,
              pdp_legend = False,
             all_threeway_combinations = False):
 
-  #If y only has two outcomes, then set predict_proba to True
+  #If y only has two outcomes, then set predict_proba to Trueti
   if predict_method == True:
     predict_proba = False
   elif len(np.unique(y))>2:
@@ -49,16 +49,8 @@ def run_egive(X, y, model, metric,
     print(f'Features {np.where(X.var(axis=0) == 0)[0]} have zero variance. Please filter the dataset and trained model to features with non-zero variance')
     return None
 
-  runningtime_FEATURE_IMP = 0
-  runningtime_PDP = 0
-  runningtime_PD2ICE = 0
-  runningtime_PD2RIVER = 0
-  runningtime_PD3ICE = 0
-  runningtime_PD3RIVER = 0
-
   ###FEATURE IMPORTANCE CALCULATION##
-  timestamp_FEATURE_IMP = timeit.default_timer()
-
+  
   if isinstance(X, pd.core.frame.DataFrame):
     is_df = True
     fnames = X.columns
@@ -158,10 +150,7 @@ def run_egive(X, y, model, metric,
     kept_features = X.columns if is_df==True else ['X'+str(i) for i in range(k)]
     kept_feature_nums = np.arange(k)
 
-  runningtime_FEATURE_IMP += timeit.default_timer() - timestamp_FEATURE_IMP
-
   ###PDP RUNTIME###
-  timestamp_PDP = timeit.default_timer()
 
   #Create df for pdp plot
   ns = [len(p) for p in pdp_x_list]
@@ -178,10 +167,7 @@ def run_egive(X, y, model, metric,
   if feature_limit is not None:
     pdp_df_combined = pdp_df_combined[pdp_df_combined['Feature'].isin(kept_features)]
 
-  runningtime_PDP += timeit.default_timer() - timestamp_PDP
-
   ###INTERACTION RUNTIME###
-  timestamp_PD2ICE_PD3ICE = timeit.default_timer()
 
     #Get filters and weights for estimated pairwise h^2 statistics
   h2_filter2_list = []
@@ -205,12 +191,7 @@ def run_egive(X, y, model, metric,
     f_filters2, f_weights2 = result_tuples[f]
     h2_filter2_list.append(f_filters2); h2_weight2_list.append(f_weights2)
 
-  added_time = timeit.default_timer() - timestamp_PD2ICE_PD3ICE
-  runningtime_PD2ICE += added_time / 2
-  runningtime_PD3ICE += added_time / 2
-
   ###PD2RIVER RUNTIME###
-  timestamp_PD2RIVER = timeit.default_timer()
     #Get filters and weights for moderated PDPs
   upper_cutoffs = np.quantile(X, axis = 0, q = interaction_quantiles[1])
   lower_cutoffs = np.quantile(X, axis = 0, q = interaction_quantiles[0])
@@ -309,10 +290,7 @@ def run_egive(X, y, model, metric,
     pdp_df_twoway = pdp_df_twoway.loc[(pdp_df_twoway['Feature'].isin(kept_features)) & (pdp_df_twoway['Feature 2'].isin(kept_features)),:]
   print('PDP df shape: ' + str(pdp_df_twoway.shape))
 
-  runningtime_PD2RIVER += timeit.default_timer() - timestamp_PD2RIVER
-
   ###INTERACTION PDP RUNTIME###
-  timestamp_PD2ICE = timeit.default_timer()
 
   print('Running through interactions')
   f1_short = [] ; f2_short = []
@@ -365,10 +343,7 @@ def run_egive(X, y, model, metric,
   int_df.loc[int_df['Feature']==int_df['Feature 2'], 'Diff'] = 0 #zero out same-variable rows; variable can't interact with itself
   orig_int_df = int_df.copy(deep = True)
 
-  runningtime_PD2ICE += timeit.default_timer() - timestamp_PD2ICE
-
   ###PD3ICE RUNTIME###
-  timestamp_PD3ICE = timeit.default_timer()
 
   #Higher-order interaction plot
   int_df_filt = int_df[int_df['Feature'] != int_df['Feature 2']]
@@ -437,10 +412,7 @@ def run_egive(X, y, model, metric,
 
   higher_order_df = pd.concat([higher_order_df, top_df2, top_df3]).drop_duplicates(['Feature','Interaction V1','Interaction V2'])
 
-  runningtime_PD3ICE += timeit.default_timer() - timestamp_PD3ICE
-
   ###PD3RIVER RUNTIME###
-  timestamp_PD3RIVER = timeit.default_timer()
 
   #Create matrix of moderated PDPs
   print('Filtering three-way interactions for PDP matrix')
@@ -498,12 +470,9 @@ def run_egive(X, y, model, metric,
     print('No three-way PDPs to visualize')
     high_int_df_long = pd.DataFrame(columns = ['Feature','Feature Num','V2 Level','V3 Level','X','Y','Interaction V1','Interaction V2'])
 
-  runningtime_PD3RIVER += timeit.default_timer() - timestamp_PD3RIVER
-
   ####PLOT RESULTS###
 
   ###FEATURE IMPORTANCE - PLOTTING###
-  timestamp_FEATURE_IMP = timeit.default_timer()
 
   #Plot results
   print('Generating plot')
@@ -549,9 +518,6 @@ def run_egive(X, y, model, metric,
   )
   decomp_chart = decomp_chart.add_params(feature_selector1_click)
 
-  runningtime_FEATURE_IMP += timeit.default_timer() - timestamp_FEATURE_IMP
-  timestamp_PDP = timeit.default_timer()
-
   ###PDP PLOTTING###
   pdp_xmin = pdp_df_combined['Y'].min()
   pdp_xmax = pdp_df_combined['Y'].max()
@@ -570,10 +536,7 @@ def run_egive(X, y, model, metric,
   pdp_chart = pdp_chart.add_params(
               feature_selector2,feature_selector2_click)
 
-  runningtime_PDP += timeit.default_timer() - timestamp_PDP
-
   ###PAIRWISE INTERACTION SCORE PLOTTING###
-  timestamp_PD2ICE = timeit.default_timer()
 
   scale = alt.Scale(domain = int_df['Feature'].unique(),
                                     range = list(['#2ca02cFF']*k))
@@ -592,10 +555,8 @@ def run_egive(X, y, model, metric,
   int_chart = int_chart.transform_filter(feature_selector1_click)
   int_chart = int_chart.add_params(feature_selector3, feature_selector3_click)
 
-  runningtime_PD2ICE += timeit.default_timer() - timestamp_PD2ICE
 
   ###PAIRWISE PDP PLOTTING###
-  timestamp_PD2RIVER = timeit.default_timer()
   int_names = list(error_matrices.keys())
   positive_ints = list(int_df[int_df['Diff']>0]['Feature Combo'])
   positive_ints = positive_ints + [p.split(':')[1]+':'+p.split(':')[0] for p in positive_ints]
@@ -622,10 +583,8 @@ def run_egive(X, y, model, metric,
   ).properties(width=w, height=h )
   pdp_twoway_plot = pdp_twoway_plot.transform_filter(feature_selector1_click).transform_filter(feature_selector3_click)
 
-  runningtime_PD2RIVER += timeit.default_timer() - timestamp_PD2RIVER
 
   ###THREE-WAY INTERACTION SCORE PLOTTING###
-  timestamp_PD3ICE = timeit.default_timer()
 
   #Get feature names
   high_int_df_long['Feature 2'] = ['X'+str(i) for i in list(high_int_df_long['Interaction V1'])] if fnames is None else [fnames[i] for i in list(high_int_df_long['Interaction V1'])]
@@ -661,10 +620,7 @@ def run_egive(X, y, model, metric,
   high_int_chart = high_int_chart.transform_filter(feature_selector3_click)
   high_int_chart = high_int_chart.add_params(feature_selector4, feature_selector4_click)
 
-  runningtime_PD3ICE += timeit.default_timer() - timestamp_PD3ICE
-
   ###THREE-WAY PDP PLOTTING###
-  timestamp_PD3RIVER = timeit.default_timer()
 
   #Create chart showing stratified PDPs by the best two-way interaction for each feature
     #Filter to interactions where all variables unique
@@ -710,9 +666,6 @@ def run_egive(X, y, model, metric,
   high_int_pdp_chart = high_int_pdp_chart.transform_filter(feature_selector3_click) #feature 2
   high_int_pdp_chart = high_int_pdp_chart.transform_filter(feature_selector4_click) #feature 3
 
-  runningtime_PD3RIVER += timeit.default_timer() - timestamp_PD3RIVER
-  timestamp_FEATURE_IMP = timeit.default_timer()
-
   final_plot =alt.vconcat(
     alt.hconcat(decomp_chart, pdp_chart).resolve_scale(color='independent'),
     alt.hconcat(int_chart, pdp_twoway_plot).resolve_scale(color='independent', strokeDash = 'independent'),
@@ -721,7 +674,5 @@ def run_egive(X, y, model, metric,
   ).configure_axis(labelFontSize=fontsize,titleFontSize=fontsize
                   ).configure_title(fontSize=fontsize).configure_view(stroke=None)
 
-
-  runningtime_FEATURE_IMP += timeit.default_timer() - timestamp_FEATURE_IMP
 
   return final_plot
