@@ -20,8 +20,8 @@ def run_egive(X, y, model, metric,
              grid_size = 20,
              h = 200, w = 200, barsize = 10, fontsize=12,
              feature_limit = None,
-             pdp2_band_width = 0.10, 
-             pdp_ips_trim_q = 0.9, 
+             pdp2_band_width = 0.10,
+             pdp_ips_trim_q = 0.9,
              interaction_quantiles = (0.25, 0.75),
              twoway_to_threeway_ints = 25,
              threeway_int_viz_limit = 100,
@@ -30,7 +30,6 @@ def run_egive(X, y, model, metric,
              propensity_njobs = 4,
              threeway_int_njobs = 4,
              adjust_threeway = True,
-             full_threeway_matrix = True,
              pdp_legend = False,
             all_threeway_combinations = False):
 
@@ -53,7 +52,7 @@ def run_egive(X, y, model, metric,
     return None
 
   ###FEATURE IMPORTANCE CALCULATION##
-  
+
   if isinstance(X, pd.core.frame.DataFrame):
     is_df = True
     fnames = X.columns
@@ -113,7 +112,7 @@ def run_egive(X, y, model, metric,
   else:
     print('Calculating for features in parallel with '+str(feature_imp_njobs)+ ' CPUs')
   result_tuples = Parallel(n_jobs = feature_imp_njobs)(delayed_funcs)
-  
+
 
   for f in range(k):
     s_marginal, s_int, s_none, pdp_x, pdp_y, pdp_not_n, pdp_y_interp_n, pdp_ice, h2, weights = result_tuples[f]
@@ -188,7 +187,7 @@ def run_egive(X, y, model, metric,
   else:
     print('Getting propensity weights in parallel with '+str(propensity_njobs)+ ' CPUs')
   result_tuples = Parallel(n_jobs = propensity_njobs)(delayed_funcs)
-  
+
 
   for f in range(k):
     f_filters2, f_weights2 = result_tuples[f]
@@ -479,18 +478,14 @@ def run_egive(X, y, model, metric,
 
   #Plot results
   print('Generating plot')
-  feature_selector1 = alt.selection_point(on="mouseover", encodings=['y'], toggle = False)
-  feature_selector1_click = alt.selection_point(on="click", encodings=['y'])
-  feature_selector2 = alt.selection_point(on="mouseover", encodings = ['color'], toggle = False)
-  feature_selector2_click = alt.selection_point(on="click", encodings = ['color'])
-  feature_selector3 = alt.selection_point(on="mouseover", encodings=['y'], toggle = False)
-  feature_selector3_click = alt.selection_point(on="click", encodings=['y'])
-  if full_threeway_matrix==True: #plot 5 will be a matrix-style heatmap, and need to filter variables 2 & 3 based on x and y
-    feature_selector4 = alt.selection_point(on="mouseover", encodings=['x','y'], toggle = False)
-    feature_selector4_click = alt.selection_point(on="click", encodings=['x','y'])
-  if full_threeway_matrix==False: #plot 5 will be a bar chart, and need to filter just based on the y-axis
-    feature_selector4 = alt.selection_point(on="mouseover", encodings=['y'], toggle = False)
-    feature_selector4_click = alt.selection_point(on="click", encodings=['y'])
+  feature_selector1 = alt.selection_point(on="mouseover", encodings=['y'], name = 'fs1', toggle = False)
+  feature_selector1_click = alt.selection_point(on="click", encodings=['y'], name = 'fs1_click')
+  feature_selector2 = alt.selection_point(on="mouseover", encodings = ['color'], name = 'fs2', toggle = False)
+  feature_selector2_click = alt.selection_point(on="click", encodings = ['color'], name = 'fs2_click')
+  feature_selector3 = alt.selection_point(on="mouseover", encodings=['y'], name = 'fs3', toggle = False)
+  feature_selector3_click = alt.selection_point(on="click", encodings=['y'], name = 'fs3_click')
+  feature_selector4 = alt.selection_point(on="mouseover", encodings=['y'], name = 'fs4', toggle = False)
+  feature_selector4_click = alt.selection_point(on="click", encodings=['y'], name = 'fs4_click')
 
   #global _plot_feature_selectors
   _plot_feature_selectors = [feature_selector1, feature_selector1_click, feature_selector2,
@@ -566,7 +561,7 @@ def run_egive(X, y, model, metric,
 
   pdp_df_twoway_incl = pdp_df_twoway[pdp_df_twoway['Feature Combo'].isin(positive_ints)]
   print('Filtered PDP df has '+str(pdp_df_twoway_incl.shape[0])+ ' rows')
-  
+
 
   ymin = pdp_df_twoway_incl['Y'].min()
   ymax = pdp_df_twoway_incl['Y'].max()
@@ -582,7 +577,7 @@ def run_egive(X, y, model, metric,
   strokeDash = alt.StrokeDash('Feature 2 Level',
        legend = alt.Legend(orient= 'none', legendX = w + 10, legendY = 0.05 * h, title = 'V2 Level',
                            symbolStrokeColor = 'black', symbolSize = 400)
-    ) 
+    )
   ).properties(width=w, height=h )
   pdp_twoway_plot = pdp_twoway_plot.transform_filter(feature_selector1_click).transform_filter(feature_selector3_click)
 
