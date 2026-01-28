@@ -1,3 +1,17 @@
+import numpy as np
+import pandas as pd
+import scipy
+import joblib
+from joblib import Parallel, delayed
+import altair as alt
+alt.data_transformers.enable("vegafusion")
+alt.data_transformers.disable_max_rows()
+import sklearn
+from sklearn.linear_model import Ridge, LinearRegression, LogisticRegression
+from sklearn.preprocessing import PolynomialFeatures, SplineTransformer
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics import roc_auc_score
+
 def run_egive(X, y, model, metric,
              predict_method = None,
              grid_size = 20,
