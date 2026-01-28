@@ -297,4 +297,36 @@ def feature_importance_scores(X, y, model, f, metric, grid_size = 20,
   return marginal_score, int_score, none_score, values, \
       f_pdp, f_not_pdp, f_pdp_interp, pdp, h2, weights
 
+def egive_center_pdp(pdp_df):
+  full_df = pdp_df.copy(deep = True)
+  feature_vars = ['Feature','Interaction V1','Interaction V2']
+
+  #Initial mean centering
+  full_df['Y'] = full_df['Y'] - full_df.groupby(
+      feature_vars + ['V2 Level','V3 Level']
+      )['Y'].transform('mean')
+  return full_df
+
+def egive_append_threeway_scores(pdp_df):
+  full_df = pdp_df.copy(deep = True)
+  feature_vars = ['Feature','Interaction V1','Interaction V2']
+
+  full_df = egive_center_pdp(full_df)
+
+  full_df['pdp_avg'] = full_df.groupby(feature_vars + ['X'])['Y'].transform('mean')
+  full_df['pdp_c'] = full_df['Y'] - full_df['pdp_avg']
+  full_df['pdp_x2'] = full_df.groupby(feature_vars + ['X','V2 Level'])['Y'].transform('mean')
+  full_df['pdp_x3'] = full_df.groupby(feature_vars + ['X','V3 Level'])['Y'].transform('mean')
+  full_df['pdp_x2_c'] = full_df['pdp_x2'] - full_df['pdp_avg']
+  full_df['pdp_x3_c'] = full_df['pdp_x3'] - full_df['pdp_avg']
+
+  full_df['numer'] = (full_df['pdp_c'] - full_df['pdp_x2_c'] - full_df['pdp_x3_c'])**2
+
+  summ_df = full_df.groupby(feature_vars + ['X'], as_index = False)['numer'].sum()
+  summ_df = summ_df.groupby(feature_vars, as_index = False)['numer'].std()
+
+  summ_df.columns = feature_vars + ['Threeway Score']
+  pdp_df = pdp_df.merge(summ_df[feature_vars + ['Threeway Score']], how = 'left', on = feature_vars)
+  return pdp_df
+
 
