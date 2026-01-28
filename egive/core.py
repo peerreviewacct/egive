@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy
 import joblib
+import statsmodels.api as sm
 from joblib import Parallel, delayed
 import altair as alt
 alt.data_transformers.enable("vegafusion")
