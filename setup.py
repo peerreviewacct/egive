@@ -30,6 +30,7 @@ setup(
         "scikit-learn>=1.6.1, < 2",
         "statsmodels>=0.14.6, < 1",
         "vegafusion[embed] >= 1.5.0",
-       "vl-convert-python >= 1.6.0"
+       "vl-convert-python >= 1.6.0",
+        "pyarrow >= 23.0.0, < 24"
     ],
 )
