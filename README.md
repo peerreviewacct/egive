@@ -184,7 +184,7 @@ EGIVE is well-suited for:
 If you use EGIVE in your research, please cite:
 
 ```bibtex
-@article{aslani_egive,
+@article{egive,
   title={EGIVE: Efficient Global Interaction and Variable Explainability},
   author={},
   journal={Under review},
