@@ -186,7 +186,7 @@ If you use EGIVE in your research, please cite:
 ```bibtex
 @article{aslani_egive,
   title={EGIVE: Efficient Global Interaction and Variable Explainability},
-  author={Aslani, Babak and Mohebbi, Shima},
+  author={},
   journal={Under review},
   year={2026}
 }
