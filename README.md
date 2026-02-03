@@ -229,10 +229,10 @@ run_egive(X, y, model, metric,
 
 | Argument | Type | Description |
 |----------|------|-------------|
-| `X` | | [YOUR DESCRIPTION HERE] |
-| `y` | | [YOUR DESCRIPTION HERE] |
-| `model` | | [YOUR DESCRIPTION HERE] |
-| `metric` | | [YOUR DESCRIPTION HERE] |
+| `X` | | Tabular dataset of predictors. Accepts arrays or Pandas dataframes. |
+| `y` | | Binary or continuous outcome vector, an array. |
+| `model` | | Trained predictive model. Must have `predict' or `predict_proba' method for generating predictions. |
+| `metric` | | Model performance metric for computing feature importances. Accepts `mae', `mse', `mae' for regressors, and `auc' for classifiers. Also accepts callable functions. |
 
 #### Optional Arguments
 
