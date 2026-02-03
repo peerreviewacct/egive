@@ -232,7 +232,7 @@ run_egive(X, y, model, metric,
 | `X` | | Tabular dataset of predictors. Accepts arrays or Pandas dataframes. |
 | `y` | | Binary or continuous outcome vector, an array. |
 | `model` | | Trained predictive model. Must have `predict' or `predict_proba' method for generating predictions. |
-| `metric` | | Model performance metric for computing feature importances. Accepts `mae', `mse', `mae' for regressors, and `auc' for classifiers. Also accepts callable functions. |
+| `metric` | | Model performance metric for computing feature importances. Accepts `mae', `mse', `mae' for regressors, and `auc' for classifiers. Also accepts callable functions. If passing a function, higher values should represent poorer model performance. |
 
 #### Optional Arguments
 
@@ -240,31 +240,31 @@ run_egive(X, y, model, metric,
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `predict_method` | | `None` | [YOUR DESCRIPTION HERE] |
+| `predict_method` | | `None` | Only used for binary classifier models. Set to `True' if feature importances should be computed using model's predict() method, as opposed to predict_proba(). If left as `None', classifier importances will be computed with predict_proba() |
 
 ##### Visualization Settings
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `grid_size` | int | `20` | [YOUR DESCRIPTION HERE] |
-| `h` | int | `200` | [YOUR DESCRIPTION HERE] |
-| `w` | int | `200` | [YOUR DESCRIPTION HERE] |
-| `barsize` | int | `10` | [YOUR DESCRIPTION HERE] |
-| `fontsize` | int | `12` | [YOUR DESCRIPTION HERE] |
-| `pdp_legend` | bool | `False` | [YOUR DESCRIPTION HERE] |
+| `grid_size` | int | `10` | Number of grid points for partial dependence functions. |
+| `h` | int | `200` | Individual plot height, in pixels. |
+| `w` | int | `200` | Individual plot width, in pixels. |
+| `barsize` | int | `10` | Bar width, in pixels, for feature and interaction importances. |
+| `fontsize` | int | `12` | Font size for plot labels. |
+| `pdp_legend` | bool | `False` | Whether PDP plot should include a legend with variable labels. Recommended to leave as `False' unless multi-selecting PDPs for simultaneous visualization. |
 
 ##### Feature Settings
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `feature_limit` | | `None` | [YOUR DESCRIPTION HERE] |
+| `feature_limit` | | `None` | Plots will only present importance and interaction scores for the top `feature_limit' most important features. |
 
 ##### Partial Dependence Plot (PDP) Settings
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `pdp2_band_width` | float | `0.10` | [YOUR DESCRIPTION HERE] |
-| `pdp_ips_trim_q` | float | `0.9` | [YOUR DESCRIPTION HERE] |
+| `pdp2_band_width` | float | `0.10` | Quantile bandwidth for computing pairwise interaction scores. |
+| `pdp_ips_trim_q` | float | `0.9` | Quantile at which inverse propensity weights will be trimmed for multi-way partial dependence estimation. |
 
 ##### Interaction Analysis Settings
 
@@ -301,7 +301,6 @@ run_egive(X, y, model, metric,
 from egive import run_egive
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
-from sklearn.metrics import accuracy_score
 
 # Prepare data and model
 X, y = make_classification(n_samples=1000, n_features=10, random_state=42)
@@ -309,17 +308,15 @@ model = RandomForestClassifier(random_state=42)
 model.fit(X, y)
 
 # Generate dashboard
-run_egive(X, y, model, accuracy_score)
+run_egive(X, y, model = model, metric = 'auc')
 ```
 
 ```python
 # Example with custom settings
 run_egive(
-    X, y, model, accuracy_score,
-    grid_size=30,
-    feature_limit=5,
-    propensity_njobs=8,
-    pdp_legend=True
+    X, y, model, 'auc',
+    grid_size=10,
+    feature_limit=5
 )
 ```
 
