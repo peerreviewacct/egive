@@ -221,7 +221,7 @@ Generate a comprehensive dashboard of interpretable machine learning metrics for
 ```python
 run_egive(X, y, model, metric, 
     predict_method=None, grid_size=20, h=200, w=200, barsize=10, fontsize=12,  feature_limit=None, pdp2_band_width=0.10, pdp_ips_trim_q=0.9, interaction_quantiles=(0.25, 0.75), twoway_to_threeway_ints=25,
-    threeway_int_viz_limit=100, propensity_samples=1000, feature_imp_njobs=1, propensity_njobs=4, threeway_int_njobs=4, adjust_threeway=True, pdp_legend=False, all_threeway_combinations=False
+    threeway_int_viz_limit=100, propensity_samples=1000, feature_imp_njobs=1, propensity_njobs=-1, pdp_legend=False, all_threeway_combinations=False
 )
 ```
 
@@ -272,23 +272,21 @@ run_egive(X, y, model, metric,
 |----------|------|---------|-------------|
 | `interaction_quantiles` | tuple | `(0.25, 0.75)` | Quantiles used to define 'high' versus 'low' values of interacting variables, passed as an ordered tuple. 'Low' and 'high' partial dependence plots will be computed over rows where the interacting variable value is below the lower quantile and above the higher quantile. |
 | `twoway_to_threeway_ints` | int | `25` | How many of the top-ranked pairwise interactions should be interacted with all features to generated candidate three-way interactions. For instance, in a dataset with `m` variables, each of the `m` variables will be interacted with the variable pairs from the top `twoway_to_threeway_ints` pairwise interactions, yielding `m` * `twoway_to_threeway_ints` candidate three-way interactions. |
-| `threeway_int_viz_limit` | int | `100` | [YOUR DESCRIPTION HERE] |
-| `adjust_threeway` | bool | `True` | [YOUR DESCRIPTION HERE] |
-| `all_threeway_combinations` | bool | `False` | [YOUR DESCRIPTION HERE] |
+| `threeway_int_viz_limit` | int | `100` | Number of highest-scoring three-way interactions for which three-way partial dependence plots should be included. Setting to `None` will allow all tested three-way interactions to be visualized with partial dependence plots, but will slow down the plot's rendering in the notebook console. |
+| `all_threeway_combinations` | bool | `False` | Whether the `threeway_int_viz_limit` partial dependence visualizations should be used to visualize all possible combinations of the strongest interactions (`True`), or simply the `threeway_int_viz_limit` three-way partial dependence functions with the highest scores. |
 
 ##### Propensity Settings
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `propensity_samples` | int | `1000` | [YOUR DESCRIPTION HERE] |
+| `propensity_samples` | int | `1000` | Number of dataset samples used to estimate propensity scores for multi-way partial dependence functions.  |
 
 ##### Performance Settings
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `feature_imp_njobs` | int | `1` | [YOUR DESCRIPTION HERE] |
-| `propensity_njobs` | int | `4` | [YOUR DESCRIPTION HERE] |
-| `threeway_int_njobs` | int | `4` | [YOUR DESCRIPTION HERE] |
+| `feature_imp_njobs` | int | `1` | Number of cores (via `joblib`) to use when estimating univariate feature importances and partial dependence functions. |
+| `propensity_njobs` | int | `-1` | Number of cores (via `joblib`) to use when computing propensity scores for multi-way partial dependence functions. |
 
 #### Returns
 
