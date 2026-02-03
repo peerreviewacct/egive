@@ -271,7 +271,7 @@ run_egive(X, y, model, metric,
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
 | `interaction_quantiles` | tuple | `(0.25, 0.75)` | Quantiles used to define 'high' versus 'low' values of interacting variables, passed as an ordered tuple. 'Low' and 'high' partial dependence plots will be computed over rows where the interacting variable value is below the lower quantile and above the higher quantile. |
-| `twoway_to_threeway_ints` | int | `25` | [YOUR DESCRIPTION HERE] |
+| `twoway_to_threeway_ints` | int | `25` | How many of the top-ranked pairwise interactions should be interacted with all features to generated candidate three-way interactions. For instance, in a dataset with `m` variables, each of the `m` variables will be interacted with the variable pairs from the top `twoway_to_threeway_ints' pairwise interactions, yielding `m' * `twoway_to_threeway_ints' candidate three-way interactions. |
 | `threeway_int_viz_limit` | int | `100` | [YOUR DESCRIPTION HERE] |
 | `adjust_threeway` | bool | `True` | [YOUR DESCRIPTION HERE] |
 | `all_threeway_combinations` | bool | `False` | [YOUR DESCRIPTION HERE] |
