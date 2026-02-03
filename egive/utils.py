@@ -283,7 +283,11 @@ def feature_importance_scores(X, y, model, f, metric, grid_size = 20,
     metric = rmse
   if metric=='mse':
     metric = mse
-
+  if metric == 'mae':
+    metric = mae
+  if metric == 'auc':
+    metric = neg_auc
+    
   #Add yhat_mean back to 'un mean center' the predictions
   score = metric(y, yhat_uncentered)
   score_none = metric(y, none_pred + yhat_mean)
