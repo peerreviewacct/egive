@@ -17,7 +17,7 @@ from .utils import neg_auc, rmse, mse, mae, retrieve_quantiles, get_neighborhood
 
 def run_egive(X, y, model, metric,
              predict_method = None,
-             grid_size = 20,
+             grid_size = 10,
              h = 200, w = 200, barsize = 10, fontsize=12,
              feature_limit = None,
              pdp2_band_width = 0.10,
@@ -27,8 +27,7 @@ def run_egive(X, y, model, metric,
              threeway_int_viz_limit = 100,
              propensity_samples = 1000,
              feature_imp_njobs = 1,
-             propensity_njobs = 4,
-             threeway_int_njobs = 4,
+             propensity_njobs = -1,
              adjust_threeway = True,
              pdp_legend = False,
             all_threeway_combinations = False):
@@ -251,6 +250,10 @@ def run_egive(X, y, model, metric,
     metric = rmse #callable function
   if metric=='mse':
     metric = mse
+  if metric == 'mae':
+    metric = mae
+  if metric == 'auc':
+    metric = neg_auc
 
   error_matrices = {}
   counter = -1
