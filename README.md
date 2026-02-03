@@ -231,8 +231,8 @@ run_egive(X, y, model, metric,
 |----------|------|-------------|
 | `X` | | Tabular dataset of predictors. Accepts arrays or Pandas dataframes. |
 | `y` | | Binary or continuous outcome vector, an array. |
-| `model` | | Trained predictive model. Must have `predict' or `predict_proba' method for generating predictions. |
-| `metric` | | Model performance metric for computing feature importances. Accepts `mae', `mse', `mae' for regressors, and `auc' for classifiers. Also accepts callable functions. If passing a function, higher values should represent poorer model performance. |
+| `model` | | Trained predictive model. Must have `predict` or `predict_proba` method for generating predictions. |
+| `metric` | | Model performance metric for computing feature importances. Accepts `mae`, `mse`, `mae` for regressors, and `auc` for classifiers. Also accepts callable functions. If passing a function, higher values should represent poorer model performance. |
 
 #### Optional Arguments
 
@@ -240,7 +240,7 @@ run_egive(X, y, model, metric,
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `predict_method` | | `None` | Only used for binary classifier models. Set to `True' if feature importances should be computed using model's predict() method, as opposed to predict_proba(). If left as `None', classifier importances will be computed with predict_proba() |
+| `predict_method` | | `None` | Only used for binary classifier models. Set to `True` if feature importances should be computed using model's predict() method, as opposed to predict_proba(). If left as `None`, classifier importances will be computed with predict_proba() |
 
 ##### Visualization Settings
 
@@ -251,7 +251,7 @@ run_egive(X, y, model, metric,
 | `w` | int | `200` | Individual plot width, in pixels. |
 | `barsize` | int | `10` | Bar width, in pixels, for feature and interaction importances. |
 | `fontsize` | int | `12` | Font size for plot labels. |
-| `pdp_legend` | bool | `False` | Whether PDP plot should include a legend with variable labels. Recommended to leave as `False' unless multi-selecting PDPs for simultaneous visualization. |
+| `pdp_legend` | bool | `False` | Whether PDP plot should include a legend with variable labels. Recommended to leave as `False` unless multi-selecting PDPs for simultaneous visualization. |
 
 ##### Feature Settings
 
