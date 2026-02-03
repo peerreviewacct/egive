@@ -191,3 +191,137 @@ If you use EGIVE in your research, please cite:
   year={2026}
 }
 
+# eGIVE
+
+> Interpretable Machine Learning Dashboard Generator
+
+## Installation
+
+```bash
+pip install egive
+```
+
+## Quick Start
+
+```python
+from egive import run_egive
+
+# Generate interpretability dashboard
+run_egive(X, y, model, metric)
+```
+
+## Function Reference
+
+### `run_egive()`
+
+Generate a comprehensive dashboard of interpretable machine learning metrics for a trained model.
+
+#### Syntax
+
+```python
+run_egive(X, y, model, metric, 
+    predict_method=None, grid_size=20, h=200, w=200, barsize=10, fontsize=12,  feature_limit=None, pdp2_band_width=0.10, pdp_ips_trim_q=0.9, interaction_quantiles=(0.25, 0.75), twoway_to_threeway_ints=25,
+    threeway_int_viz_limit=100, propensity_samples=1000, feature_imp_njobs=1, propensity_njobs=4, threeway_int_njobs=4, adjust_threeway=True, pdp_legend=False, all_threeway_combinations=False
+)
+```
+
+#### Required Arguments
+
+| Argument | Type | Description |
+|----------|------|-------------|
+| `X` | | [YOUR DESCRIPTION HERE] |
+| `y` | | [YOUR DESCRIPTION HERE] |
+| `model` | | [YOUR DESCRIPTION HERE] |
+| `metric` | | [YOUR DESCRIPTION HERE] |
+
+#### Optional Arguments
+
+##### Model Configuration
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `predict_method` | | `None` | [YOUR DESCRIPTION HERE] |
+
+##### Visualization Settings
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `grid_size` | int | `20` | [YOUR DESCRIPTION HERE] |
+| `h` | int | `200` | [YOUR DESCRIPTION HERE] |
+| `w` | int | `200` | [YOUR DESCRIPTION HERE] |
+| `barsize` | int | `10` | [YOUR DESCRIPTION HERE] |
+| `fontsize` | int | `12` | [YOUR DESCRIPTION HERE] |
+| `pdp_legend` | bool | `False` | [YOUR DESCRIPTION HERE] |
+
+##### Feature Settings
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `feature_limit` | | `None` | [YOUR DESCRIPTION HERE] |
+
+##### Partial Dependence Plot (PDP) Settings
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `pdp2_band_width` | float | `0.10` | [YOUR DESCRIPTION HERE] |
+| `pdp_ips_trim_q` | float | `0.9` | [YOUR DESCRIPTION HERE] |
+
+##### Interaction Analysis Settings
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `interaction_quantiles` | tuple | `(0.25, 0.75)` | [YOUR DESCRIPTION HERE] |
+| `twoway_to_threeway_ints` | int | `25` | [YOUR DESCRIPTION HERE] |
+| `threeway_int_viz_limit` | int | `100` | [YOUR DESCRIPTION HERE] |
+| `adjust_threeway` | bool | `True` | [YOUR DESCRIPTION HERE] |
+| `all_threeway_combinations` | bool | `False` | [YOUR DESCRIPTION HERE] |
+
+##### Propensity Settings
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `propensity_samples` | int | `1000` | [YOUR DESCRIPTION HERE] |
+
+##### Performance Settings
+
+| Argument | Type | Default | Description |
+|----------|------|---------|-------------|
+| `feature_imp_njobs` | int | `1` | [YOUR DESCRIPTION HERE] |
+| `propensity_njobs` | int | `4` | [YOUR DESCRIPTION HERE] |
+| `threeway_int_njobs` | int | `4` | [YOUR DESCRIPTION HERE] |
+
+#### Returns
+
+[DESCRIBE WHAT THE FUNCTION RETURNS]
+
+## Example Usage
+
+```python
+# Example with minimal arguments
+from egive import run_egive
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import make_classification
+from sklearn.metrics import accuracy_score
+
+# Prepare data and model
+X, y = make_classification(n_samples=1000, n_features=10, random_state=42)
+model = RandomForestClassifier(random_state=42)
+model.fit(X, y)
+
+# Generate dashboard
+run_egive(X, y, model, accuracy_score)
+```
+
+```python
+# Example with custom settings
+run_egive(
+    X, y, model, accuracy_score,
+    grid_size=30,
+    feature_limit=5,
+    propensity_njobs=8,
+    pdp_legend=True
+)
+```
+
+
+
