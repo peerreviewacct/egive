@@ -270,7 +270,7 @@ run_egive(X, y, model, metric,
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
-| `interaction_quantiles` | tuple | `(0.25, 0.75)` | [YOUR DESCRIPTION HERE] |
+| `interaction_quantiles` | tuple | `(0.25, 0.75)` | Quantiles used to define 'high' versus 'low' values of interacting variables, passed as an ordered tuple. 'Low' and 'high' partial dependence plots will be computed over rows where the interacting variable value is below the lower quantile and above the higher quantile. |
 | `twoway_to_threeway_ints` | int | `25` | [YOUR DESCRIPTION HERE] |
 | `threeway_int_viz_limit` | int | `100` | [YOUR DESCRIPTION HERE] |
 | `adjust_threeway` | bool | `True` | [YOUR DESCRIPTION HERE] |
@@ -308,16 +308,14 @@ model = RandomForestClassifier(random_state=42)
 model.fit(X, y)
 
 # Generate dashboard
-run_egive(X, y, model = model, metric = 'auc')
-```
-
-```python
-# Example with custom settings
-run_egive(
+dashboard = run_egive(
     X, y, model, 'auc',
     grid_size=10,
     feature_limit=5
 )
+
+# Print interactive dashboard to notebook console
+dashboard
 ```
 
 
