@@ -52,7 +52,7 @@ def logit_catch_singular(y, X_train, X):
   except (np.linalg.LinAlgError, PerfectSeparationError) as e:
       print(f"Caught propensity regression with error: {str(e)}")
       print("Switching to ridge logistic regression...")
-      sm_model = LogisticRegression(penalty='l2',fit_intercept=False).fit(X_train, y)
+      sm_model = LogisticRegression(l1_ratio = 0,fit_intercept=False).fit(X_train, y)
       return sm_model.predict_proba(X)[:,1]
 
 
