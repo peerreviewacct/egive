@@ -123,10 +123,10 @@ def propensity_filters_and_weights(f, pdp_w_list, pdp2_band_width,
 
   #Now compute propensities
   if regularize == True:
-    f_propensities2 = [LogisticRegression(penalty='l2',fit_intercept=False).fit(
+    f_propensities2 = [LogisticRegression(l1_ratio = 0,fit_intercept=False).fit(
           np.delete(X_lr_train, f, axis = 1), filt[sample_index]).predict_proba(np.delete(X_lr, f, axis = 1))[:,1] for filt in f_filters2]
     if run_threeway == True:
-      f_propensities3 = [LogisticRegression(penalty='l2',fit_intercept=False).fit(
+      f_propensities3 = [LogisticRegression(l1_ratio = 0,fit_intercept=False).fit(
             np.delete(X_lr_train, f, axis = 1), filt[sample_index]).predict_proba(np.delete(X_lr, f, axis = 1))[:,1] for filt in f_filters3]
 
   else:
@@ -164,11 +164,11 @@ def pdp_propensity_filters_and_weights(f, pdp_high_filter, pdp_low_filter, X, pd
 
   #Now compute propensities
   if regularize == True: #fit from X_lr_train, predict based on X_lr (which may be same matrix if X.shape[0] < propensity_samples)
-    high_propensities = LogisticRegression(penalty='l2',fit_intercept=False).fit(
+    high_propensities = LogisticRegression(l1_ratio = 0,fit_intercept=False).fit(
         np.delete(X_lr_train, f, axis = 1),
         pdp_high_filter[sample_index,f] #use sample_index to subset y (which may just be all rows)
         ).predict_proba(np.delete(X_lr, f, axis = 1))[:,1]
-    low_propensities = LogisticRegression(penalty='l2',fit_intercept=False).fit(
+    low_propensities = LogisticRegression(l1_ratio = 0,fit_intercept=False).fit(
         np.delete(X_lr_train, f, axis = 1),
         pdp_low_filter[sample_index,f] #use sample_index to subset y (which may just be all rows)
         ).predict_proba(np.delete(X_lr, f, axis = 1))[:,1]
