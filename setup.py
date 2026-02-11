@@ -10,7 +10,7 @@ setup(
     author="Anonymous for peer review",  
     author_email="",  
     description="A Python package for EGIVE, an efficient variable importance and interaction detection method for black-box ML models",
-    long_description="",
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/peerreviewacct/egive", 
     packages=find_packages(),
