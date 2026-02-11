@@ -15,7 +15,7 @@ setup(
     url="https://github.com/peerreviewacct/egive", 
     packages=find_packages(),
     classifiers=[
-    "License :: OSI Approved :: Apache Software License",  # ← Correct format
+    "License :: OSI Approved :: Apache Software License", 
     ],
     python_requires=">=3.7",
     install_requires=[
